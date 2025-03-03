@@ -2,14 +2,17 @@ require 'csv'
 require 'google/apis/civicinfo_v2'
 require 'erb'
 
+# cleaning zipcode for use
 def clean_zipcode(zipcode)
   zipcode.to_s.rjust(5,"0")[0..4]
 end
+# collecting phone number
 
+# sorting zipcode by legislator
 def legislators_by_zipcode(zip)
   civic_info = Google::Apis::CivicinfoV2::CivicInfoService.new
   civic_info.key = 'AIzaSyClRzDqDh5MsXwnCWi0kOiiBivP6JsSyBw'
-
+  # handling the case where the info is not available
   begin
     civic_info.representative_info_by_address(
       address: zip,
@@ -21,6 +24,7 @@ def legislators_by_zipcode(zip)
   end
 end
 
+# creating and saving a thankyou letter
 def save_thank_you_letter(id,form_letter)
   Dir.mkdir('output') unless Dir.exist?('output')
 
@@ -47,7 +51,7 @@ contents.each do |row|
   name = row[:first_name]
   zipcode = clean_zipcode(row[:zipcode])
   legislators = legislators_by_zipcode(zipcode)
-
+  
   form_letter = erb_template.result(binding)
 
   save_thank_you_letter(id,form_letter)
