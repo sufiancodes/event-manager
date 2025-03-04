@@ -26,13 +26,25 @@ def clean_phone_number(number)
   end
 end
 
-
+def date_to_day(datetime)
+  date_object = DateTime.strptime(datetime, '%m/%d/%Y %k : %M')
+  day = date_object.wday
+end
 
 def date_to_hour(datetime)
   date_object = DateTime.strptime(datetime, '%m/%d/%Y %k : %M')
   hour = date_object.hour
 end
 
+popular_week_day = []
+puts "Here most important weekdays"
+content.each do |row|
+  important_day = date_to_day(row[:regdate])
+  popular_week_day = popular_week_day.push(important_day)
+  weekdays = popular_week_day.inject(Hash.new(0)) { |hash, value| hash[value] += 1 ; hash}
+  important_days = popular_week_day.max_by {|value| weekdays[value]}
+  puts important_days
+end
 
 popular_time_array = []
 puts "Here are most important hour"
