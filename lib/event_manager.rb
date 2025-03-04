@@ -6,7 +6,7 @@ require 'erb'
 def clean_zipcode(zipcode)
   zipcode.to_s.rjust(5,"0")[0..4]
 end
-# collecting phone number
+
 
 # sorting zipcode by legislator
 def legislators_by_zipcode(zip)
