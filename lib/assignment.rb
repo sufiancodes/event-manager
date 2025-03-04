@@ -3,12 +3,14 @@ require 'date'
 require 'csv'
 require 'erb'
 
+# opening the CSV file for reading
 content = CSV.open(
   'event_attendees.csv',
   headers: true,
   header_converters: :symbol
 )
 
+# method to clean phone numbers
 def clean_phone_number(number)
   number = number.to_s.tr('^0-9', '')
   if number.length < 10
@@ -26,16 +28,19 @@ def clean_phone_number(number)
   end
 end
 
+# method to convert date to day
 def date_to_day(datetime)
   date_object = DateTime.strptime(datetime, '%m/%d/%Y %k : %M')
   day = date_object.wday
 end
 
+# method to convert date to hour
 def date_to_hour(datetime)
   date_object = DateTime.strptime(datetime, '%m/%d/%Y %k : %M')
   hour = date_object.hour
 end
 
+# this block find the most important weekdays
 popular_week_day = []
 puts "Here most important weekdays"
 content.each do |row|
@@ -43,9 +48,11 @@ content.each do |row|
   popular_week_day = popular_week_day.push(important_day)
   weekdays = popular_week_day.inject(Hash.new(0)) { |hash, value| hash[value] += 1 ; hash}
   important_days = popular_week_day.max_by {|value| weekdays[value]}
+  # days start with Sunday and its index is 0
   puts important_days
 end
 
+# this block find the most important hours and put them
 popular_time_array = []
 puts "Here are most important hour"
 content.each do |row|
@@ -56,6 +63,7 @@ content.each do |row|
   puts peak_hour
 end
 
+#this block puts the name and zipcode of people 
 puts "Here is name and number"
 content.each do |row|
   id = row[0]

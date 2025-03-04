@@ -36,16 +36,18 @@ def save_thank_you_letter(id,form_letter)
 end
 
 puts 'EventManager initialized.'
-
+# opening the CSV file
 contents = CSV.open(
   'event_attendees.csv',
   headers: true,
   header_converters: :symbol
 )
 
+# generating templates
 template_letter = File.read('form_letter.erb')
 erb_template = ERB.new template_letter
 
+# this block generate name and zipcode and save them in output folder
 contents.each do |row|
   id = row[0]
   name = row[:first_name]
